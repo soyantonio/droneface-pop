@@ -5,7 +5,7 @@ import numpy as np
 import time
 import os
 from processes.face_recognition import init_predictor
-from processes.drone_comunication import send_subject_to_drone
+from processes.drone_communication import send_subject_to_drone
 
 vid = cv2.VideoCapture(0)
 subjects = ["", "Rolando", "Cristian", "Antonio"]
