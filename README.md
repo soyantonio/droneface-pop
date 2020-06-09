@@ -1,6 +1,8 @@
 # Droneface pop
 Point of present of a droneface internal server
 
+![droneface](doc/droneface.jpeg)
+
 ## Table of contents
 * [Table of contents](#table-of-contents)
 * [Entrypoints](#entrypoints)
