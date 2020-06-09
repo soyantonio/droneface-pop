@@ -3,7 +3,6 @@
 import time
 from flask import Flask, render_template, Response
 from model_web import VideoCamera
-from processes.drone_communication import send_subject_to_drone
 import numpy as np
 
 # define application with constructor
@@ -29,6 +28,8 @@ def gen(camera):
     start_time = time.time()
     face_timeout = 5
     pr = np.zeros([4])
+    index = 0
+    header = b'--frame\r\n' + b'Content-Type: image/jpeg\r\n\r\n'
 
     while True:
         current_time = time.time()
@@ -42,23 +43,26 @@ def gen(camera):
             index = np.argmax(pr)
             print(pr)
             if pr[index] > accepted_samples and prev_subject != index:
-                prev_subject = index
-                start_time = current_time
-                send_subject_to_drone(subjects, index)
+                yield header + b'end' + b'\r\n'
+                break
             pr = reset_present(pr)
 
         if label is not None:
             pr[label] = pr[label] + 1
             samples += 1
 
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        stream = header + frame + b'\r\n'
+
+        yield stream
 
 
 @app.route('/video_feed')
 def video_feed():
-    return Response(gen(VideoCamera()),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
+    mimetype = 'multipart/x-mixed-replace; boundary=frame'
+    goal = gen(VideoCamera())
+
+    response = Response(goal, mimetype=mimetype)
+    return response
 
 
 if __name__ == '__main__':

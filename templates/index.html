@@ -1,9 +1,31 @@
 <html>
   <head>
-    <title>Video Streaming Demonstration</title>
+    <title>Droneface</title>
+    <style>
+      body{
+        background: #4c4771;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      h1{
+        font-family: Helvetica, Arial, Sans-Serif;
+        font-weight: 500;
+        margin-top: 32px;
+      }
+    </style>
   </head>
   <body>
-    <h1>Video Streaming Demonstration</h1>
+    <h1>Droneface</h1>
     <img id="bg" src="{{ url_for('video_feed') }}">
+    <script>
+        const hola = document.getElementById('bg')
+        
+        hola.addEventListener('load', ()=>{
+          console.log('yei')
+        })
+    </script>
   </body>
 </html>
